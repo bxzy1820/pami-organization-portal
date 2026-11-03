@@ -183,8 +183,7 @@ export const externalLinks = [
   {
     label: 'Skill 平台',
     desc: '组织的技能与能力平台',
-    // 待确认：替换为 Skill 平台实际上线地址
-    url: 'https://skill.example.com',
+    url: 'http://124.223.224.129:8080/',
     primary: true
   },
   {
