@@ -118,7 +118,7 @@ X-Site-Token: <站点令牌>   // 仅写接口需要
       {
         "label": "Skill 平台",
         "desc": "组织的技能与能力平台",
-        "url": "https://skill.example.com",
+        "url": "http://124.223.224.129:8080/",
         "primary": true
       },
       {
