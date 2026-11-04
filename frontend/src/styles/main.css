@@ -22,8 +22,9 @@
   --header-h: 64px;
   --radius: 20px;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC',
-    'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC",
+    "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -305,7 +306,7 @@ main {
 
 .vcard__media {
   aspect-ratio: 2.75 / 1;
-  background: #05070d url('/hero-bg.svg') center / cover;
+  background: #05070d url("/bg.jpeg") center / cover;
 }
 
 .vcard__media.is-2 {
@@ -399,12 +400,14 @@ main {
 
 .acc__icon::before,
 .acc__icon::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   top: 50%;
   background: currentColor;
-  transition: transform 0.32s var(--ease), opacity 0.32s var(--ease);
+  transition:
+    transform 0.32s var(--ease),
+    opacity 0.32s var(--ease);
 }
 
 .acc__icon::before {
@@ -461,7 +464,9 @@ main {
   gap: 32px;
   padding: 40px 12px 40px 0;
   border-bottom: 1px solid var(--line);
-  transition: background-color 0.4s var(--ease), padding-left 0.4s var(--ease);
+  transition:
+    background-color 0.4s var(--ease),
+    padding-left 0.4s var(--ease);
 }
 
 .biz-item:hover {
@@ -504,7 +509,7 @@ main {
 }
 
 .biz-item__tags li + li::before {
-  content: '·';
+  content: "·";
   position: absolute;
   left: -10px;
 }
@@ -681,7 +686,9 @@ main {
 .reveal {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
 }
 
 .reveal.is-revealed {
@@ -698,7 +705,9 @@ main {
 }
 
 .team-row__media span {
-  transition: transform 0.7s var(--ease), color 0.5s var(--ease);
+  transition:
+    transform 0.7s var(--ease),
+    color 0.5s var(--ease);
 }
 
 .team-row:hover .team-row__media span {
@@ -738,7 +747,9 @@ main {
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
-  transition: background-color 0.3s var(--ease), color 0.3s var(--ease),
+  transition:
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease),
     border-color 0.3s var(--ease);
 }
 
@@ -805,7 +816,9 @@ main {
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 50%;
   color: #fff;
-  transition: background-color 0.35s var(--ease), color 0.35s var(--ease),
+  transition:
+    background-color 0.35s var(--ease),
+    color 0.35s var(--ease),
     border-color 0.35s var(--ease);
 }
 
@@ -830,8 +843,11 @@ main {
   opacity: 0;
   transform: translateY(10px) scale(0.96);
   pointer-events: none;
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease),
-    background-color 0.35s var(--ease), color 0.35s var(--ease),
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease),
+    background-color 0.35s var(--ease),
+    color 0.35s var(--ease),
     border-color 0.35s var(--ease);
 }
 
@@ -888,7 +904,9 @@ main {
   font-size: 15px;
   color: inherit;
   opacity: 0.76;
-  transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease);
+  transition:
+    opacity 0.2s var(--ease),
+    background-color 0.2s var(--ease);
 }
 
 .nav__link:hover {
@@ -936,7 +954,9 @@ main {
   height: 1.5px;
   border-radius: 2px;
   background: currentColor;
-  transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
+  transition:
+    transform 0.3s var(--ease),
+    opacity 0.2s var(--ease);
 }
 
 .burger span + span {
@@ -1076,7 +1096,7 @@ main {
 .hero__media {
   position: absolute;
   inset: 0;
-  background: #05070d url('/hero-bg.svg') center / cover no-repeat;
+  background: #05070d url("/hero-bg.svg") center / cover no-repeat;
   transform: scale(1.05);
   animation: heroZoom 18s var(--ease) forwards;
 }
@@ -1167,7 +1187,9 @@ main {
   align-items: center;
   padding: 24px 8px;
   border-bottom: 1px solid var(--line);
-  transition: background-color 0.3s var(--ease), padding-left 0.3s var(--ease);
+  transition:
+    background-color 0.3s var(--ease),
+    padding-left 0.3s var(--ease);
 }
 
 .index-link:hover {
@@ -1192,7 +1214,9 @@ main {
 .index-link__arrow {
   justify-self: end;
   color: var(--ink-4);
-  transition: color 0.2s var(--ease), transform 0.25s var(--ease);
+  transition:
+    color 0.2s var(--ease),
+    transform 0.25s var(--ease);
 }
 
 .index-link:hover .index-link__arrow {
@@ -1305,12 +1329,14 @@ main {
 
 .fgroup__icon::before,
 .fgroup__icon::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   top: 50%;
   background: currentColor;
-  transition: transform 0.32s var(--ease), opacity 0.32s var(--ease);
+  transition:
+    transform 0.32s var(--ease),
+    opacity 0.32s var(--ease);
 }
 
 .fgroup__icon::before {
