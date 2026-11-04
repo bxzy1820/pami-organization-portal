@@ -1,0 +1,10 @@
+{
+  "name": "pami-portal-data-layer-deliverable",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "组织门户交付包：数据库、数据访问层、中间件与测试",
+  "scripts": {
+    "test": "node --test"
+  }
+}

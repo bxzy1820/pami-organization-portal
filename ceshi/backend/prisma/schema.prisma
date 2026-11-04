@@ -1,0 +1,128 @@
+// 组织门户数据库模型（一期）
+// 分支：feature/data-layer
+// 说明：一期只建公开只读所需的表，不建 members / admins。
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// 文章类型：公告 / 成果 / 招聘
+enum PostType {
+  announcement
+  achievement
+  recruitment
+}
+
+/// 内容状态：草稿 / 已发布 / 已下线
+enum PostStatus {
+  draft
+  published
+  offline
+}
+
+/// 站点与组织基础信息（单行配置，固定 id = 1）
+/// 文案类结构化内容统一用 JSON 存储，Repository 负责归一化为接口字段。
+model SiteSetting {
+  id               Int      @id @default(1)
+  name             String   @db.VarChar(120)
+  shortName        String   @map("short_name") @db.VarChar(60)
+  brandSub         String?  @map("brand_sub") @db.VarChar(120)
+  uscc             String?  @db.VarChar(32)
+  region           String?  @db.VarChar(64)
+  park             String?  @db.VarChar(120)
+  address           String?  @db.VarChar(255)
+  addressNote      String?  @map("address_note") @db.VarChar(64)
+  slogan           String?  @db.VarChar(255)
+  intro            String?  @db.Text
+  contactEmail     String?  @map("contact_email") @db.VarChar(120)
+  logoPath         String?  @map("logo_path") @db.VarChar(255)
+  heroBgPath       String?  @map("hero_bg_path") @db.VarChar(255)
+  hero             Json?
+  statement        Json?
+  mission          Json?
+  culture          Json?
+  values           Json?
+  collaboration    Json?
+  cooperation      Json?
+  team             Json?
+  teamFunctions    Json?    @map("team_functions")
+  journey          Json?
+  place            Json?
+  navigation       Json?
+  projectsSection  Json?    @map("projects_section")
+  recruitmentSection Json?  @map("recruitment_section")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("site_settings")
+}
+
+/// 业务 / 研究方向
+model BusinessDirection {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique @db.VarChar(64)
+  title     String   @db.VarChar(160)
+  summary   String?  @db.Text
+  points    Json?
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder])
+  @@map("business_directions")
+}
+
+/// 公告 / 成果 / 招聘文章，公开接口只返回 status = published
+model Post {
+  id          Int        @id @default(autoincrement())
+  slug        String     @unique @db.VarChar(160)
+  type        PostType
+  title       String     @db.VarChar(200)
+  summary     String?    @db.VarChar(500)
+  content     String?    @db.LongText
+  coverPath   String?    @map("cover_path") @db.VarChar(255)
+  tags        Json?
+  status      PostStatus @default(draft)
+  publishedAt DateTime?  @map("published_at")
+  sortOrder   Int        @default(0) @map("sort_order")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@index([type, status, publishedAt])
+  @@map("posts")
+}
+
+/// 外部链接：Skill Hub、雄安新区官网等
+model ExternalLink {
+  id          Int      @id @default(autoincrement())
+  label       String   @db.VarChar(80)
+  description String?  @map("description") @db.VarChar(255)
+  url         String   @db.VarChar(500)
+  isPrimary   Boolean  @default(false) @map("is_primary")
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder])
+  @@map("external_links")
+}
+
+/// 媒体文件元数据（一期预留）
+/// 一期图片全部作为前端静态资源，本表不保存图片二进制，公开接口也不返回本表数据。
+model MediaFile {
+  id        Int      @id @default(autoincrement())
+  filename  String   @db.VarChar(200)
+  path      String   @db.VarChar(255)
+  mimeType  String?  @map("mime_type") @db.VarChar(120)
+  sizeBytes Int?     @map("size_bytes")
+  kind      String?  @db.VarChar(64)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("media_files")
+}
