@@ -83,7 +83,12 @@ function toggle(index) {
                   <li v-for="point in value.points" :key="point">{{ point }}</li>
                 </ul>
               </div>
-              <div class="vcard__media" :class="`is-${index + 1}`" aria-hidden="true"></div>
+              <div
+                class="vcard__media"
+                :class="`is-${index + 1}`"
+                :style="{ backgroundImage: `url(${value.image})` }"
+                aria-hidden="true"
+              ></div>
             </article>
           </div>
 
