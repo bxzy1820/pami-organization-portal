@@ -1,0 +1,30 @@
+{
+  "name": "pami-portal-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "雄安葩米 · 组织门户后端（数据层交付包）",
+  "engines": {
+    "node": ">=18.18"
+  },
+  "scripts": {
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:status": "prisma migrate status",
+    "db:studio": "prisma studio",
+    "db:seed:mock": "node ../database/scripts/import-data.js --set=mock",
+    "db:seed:initial": "node ../database/scripts/import-data.js --set=initial",
+    "db:reset:mock": "node ../database/scripts/import-data.js --set=mock --reset",
+    "db:reset:initial": "node ../database/scripts/import-data.js --set=initial --reset"
+  },
+  "prisma": {
+    "seed": "node ../database/scripts/import-data.js --set=mock"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.1.0"
+  }
+}
