@@ -6,13 +6,27 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "node --watch src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "node --test tests/*.test.js",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed:mock": "node ../database/scripts/import-data.js --set=mock",
+    "db:seed:initial": "node ../database/scripts/import-data.js --set=initial",
+    "db:reset:mock": "node ../database/scripts/import-data.js --set=mock --reset",
+    "db:reset:initial": "node ../database/scripts/import-data.js --set=initial --reset"
   },
   "dependencies": {
+    "@prisma/client": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "prisma": "^6.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "prisma": {
+    "seed": "node ../database/scripts/import-data.js --set=mock"
   }
 }

@@ -32,11 +32,17 @@ backend/
 │  ├─ middleware/
 │  │  ├─ errorHandler.js
 │  │  └─ logger.js
+│  ├─ prisma/
+│  │  └─ client.js
 │  ├─ routes/
 │  ├─ controllers/
 │  ├─ services/
 │  └─ repositories/
-│     └─ mockRepository.js
+│     └─ databaseRepository.js
+├─ prisma/
+│  ├─ schema.prisma
+│  └─ migrations/
+├─ tests/
 ├─ .env.example
 ├─ package.json
 └─ package-lock.json
@@ -91,7 +97,7 @@ npm start
 | `PORT` | `3000` | 后端端口 |
 | `API_PREFIX` | `/api/v1` | API 路径前缀 |
 | `CORS_ORIGIN` | `http://localhost:5173` | 允许访问的前端地址 |
-| `DATABASE_URL` | 示例 MySQL URL | 数据层接入后使用的数据库连接 |
+| `DATABASE_URL` | 示例 MySQL URL | Prisma 使用的数据库连接 |
 
 真实数据库密码只允许写入本地 `.env`，不得提交到 Git。
 
@@ -150,7 +156,20 @@ npm start
 
 ## 测试
 
-当前版本尚未配置自动化测试脚本。启动服务后可以通过 Swagger 或以下地址进行手动验证：
+运行 Repository、Schema 和 Seed 测试：
+
+```bash
+npm test
+```
+
+验证 Prisma Schema（需要先配置 `DATABASE_URL`）：
+
+```bash
+npm run db:validate
+npm run db:generate
+```
+
+启动服务后可以通过 Swagger 或以下地址验证公开接口：
 
 ```text
 http://localhost:3000/api/v1/site
@@ -164,13 +183,27 @@ http://localhost:3000/api/v1/recruitment?page=1&pageSize=20
 
 ## 数据层状态
 
-当前使用 `src/repositories/mockRepository.js`，用于后端和前端并行开发。正式验收前需要接入真实 Repository，最终链路为：
+Service 已接入 `src/repositories/databaseRepository.js`，默认通过 Prisma 查询 MySQL：
 
 ```text
 前端 → 后端 API → Service → 真实 Repository → MySQL
 ```
 
-切换真实数据层时，对外接口路径、分页参数和响应结构不得变化。
+初始化数据库：
+
+```bash
+npm run db:generate
+npm run db:migrate:deploy
+npm run db:reset:mock
+```
+
+切换正式初始数据：
+
+```bash
+npm run db:reset:initial
+```
+
+正式运行不依赖 Mock Repository。
 
 ## 常见问题
 
@@ -180,13 +213,15 @@ http://localhost:3000/api/v1/recruitment?page=1&pageSize=20
 | 3000 端口被占用 | 关闭占用进程，或修改 `.env` 中的 `PORT` |
 | 接口返回 404 | 确认请求路径包含 `/api/v1` |
 | 前端跨域失败 | 检查 `CORS_ORIGIN` 是否为前端实际地址 |
+| 接口返回服务内部异常 | 检查 MySQL 是否启动、`DATABASE_URL` 是否正确并确认已执行迁移与 Seed |
 
 ## 当前状态
 
 - 7 个公开接口可用。
 - Swagger 文档已配置。
-- Mock Repository 已独立于 Controller 和 Service。
+- Service 已切换为 Prisma 真实 Repository。
+- 数据库模型、迁移、Seed 和导入脚本已进入正式目录。
 - CORS 和请求日志已接入。
 - 分页参数为 `page`、`pageSize`。
-- 待接入真实 Repository。
-- 待补充自动化测试。
+- Repository、Schema 和 Seed 自动化测试为 47/47 通过。
+- 真实 MySQL 环境仍需执行迁移、Seed 和七接口端到端验证。

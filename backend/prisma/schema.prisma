@@ -1,0 +1,123 @@
+// Prisma schema — 组织门户一期唯一数据模型事实来源
+// 生成命令：npx prisma generate
+// 迁移命令：npx prisma migrate dev --name <name>
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum PostType {
+  announcement   // 公告动态
+  achievement    // 项目成果
+  recruitment    // 加入我们
+}
+
+enum PostStatus {
+  draft
+  published
+  offline
+}
+
+/// 站点配置（单行表，id 固定为 1）
+model SiteSetting {
+  id               Int      @id @default(1)
+  name             String   @map("org_name")
+  shortName        String?  @map("short_name")
+  brandSub         String?  @map("brand_sub")
+  uscc             String?  @map("uscc")
+  region           String?
+  park             String?
+  address          String?
+  addressNote      String?  @map("address_note")
+  slogan           String?
+  intro            String?
+  contactEmail     String?  @map("contact_email")
+  logoPath         String?  @map("logo_path")
+  heroBgPath       String?  @map("hero_bg_path")
+
+  /// 首页 Hero 标题数组，如 ["汇聚创新力量", "共建数字生态组织"]
+  hero             Json?
+  statement        Json?
+  mission          Json?
+  culture          Json?
+  values           Json?
+  collaboration    Json?
+  team             Json?
+  teamFunctions    Json?    @map("team_functions")
+  journey          Json?
+  place            Json?
+  navigation       Json?
+  projectsSection  Json?    @map("projects_section")
+  recruitmentSection Json?  @map("recruitment_section")
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("site_settings")
+}
+
+/// 研究方向
+model BusinessDirection {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  title     String
+  summary   String?
+  points    Json?
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder])
+  @@map("business_directions")
+}
+
+/// 文章（公告 / 成果 / 招聘）
+model Post {
+  id          Int        @id @default(autoincrement())
+  slug        String     @unique
+  type        PostType
+  status      PostStatus @default(draft)
+  title       String
+  summary     String?
+  content     String?
+  coverPath   String?    @map("cover_path")
+  publishedAt DateTime?  @map("published_at")
+  sortOrder   Int        @default(0) @map("sort_order")
+  isPinned    Boolean    @default(false) @map("is_pinned")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@index([type, status, publishedAt])
+  @@map("posts")
+}
+
+/// 外部链接
+model ExternalLink {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  url       String
+  desc      String?
+  primary   Boolean  @default(false)
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([isActive, sortOrder])
+  @@map("external_links")
+}
+
+/// 媒体文件元数据（预留）
+model MediaFile {
+  id        Int      @id @default(autoincrement())
+  path      String   @unique
+  mimeType  String   @map("mime_type")
+  size      Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("media_files")
+}
