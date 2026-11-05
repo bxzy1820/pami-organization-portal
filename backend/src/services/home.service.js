@@ -1,0 +1,8 @@
+// home.service.js
+// 业务组装层：调用 Repository 获取数据，做简单加工
+
+import * as repository from '../repositories/mockRepository.js';
+
+export async function getHomeInfo() {
+  return await repository.getHome();
+}
