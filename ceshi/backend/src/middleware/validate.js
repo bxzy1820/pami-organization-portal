@@ -47,10 +47,10 @@ export function validateObject(source, rules, target = {}) {
   return target
 }
 
-/** 常用分页 query 校验，得到 { page, pageSize } */
+/** 常用分页 query 校验（契约参数名 page/size，size 最大 50） */
 export const paginationSchema = {
-  page:     { type: 'number', min: 1, max: 100000 },
-  pageSize: { type: 'number', min: 1, max: 100 }
+  page: { type: 'number', min: 1, max: 100000 },
+  size: { type: 'number', min: 1, max: 50 }
 }
 
 export function validateQuery(rules) {

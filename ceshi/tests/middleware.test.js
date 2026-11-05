@@ -91,21 +91,21 @@ describe('Middleware Logger', () => {
 // Validate
 // ============================================================
 describe('Middleware Validate', () => {
-  it('正常分页被归一化', () => {
+  it('正常分页被归一化（契约参数 page/size）', () => {
     const mw = validateQuery(paginationSchema)
-    const req = mockReq({ query: { page: '2', pageSize: '50' } })
+    const req = mockReq({ query: { page: '2', size: '30' } })
     const res = mockRes()
     mw(req, res, () => {
-      assert.deepEqual(req.validated.query, { page: 2, pageSize: 50 })
+      assert.deepEqual(req.validated.query, { page: 2, size: 30 })
     })
   })
 
-  it('pageSize 超过 100 被截断', () => {
+  it('size 超过 50 被钳制（契约上限）', () => {
     const mw = validateQuery(paginationSchema)
-    const req = mockReq({ query: { pageSize: '200' } })
+    const req = mockReq({ query: { size: '200' } })
     const res = mockRes()
     mw(req, res, () => {
-      assert.equal(req.validated.query.pageSize, 100)
+      assert.equal(req.validated.query.size, 50)
     })
   })
 

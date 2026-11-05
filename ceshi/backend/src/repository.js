@@ -6,7 +6,7 @@
 //
 // 所有查询在数据库侧完成过滤、排序与分页，不允许查全表后内存处理。
 
-import { parseText, dateOnly } from './utils/json.js'
+import { parseText, formatDateTime } from './utils/json.js'
 import { normalizePagination } from './utils/pagination.js'
 
 // ============================================================
@@ -170,63 +170,69 @@ export async function getBusiness(db) {
 }
 
 /**
- * 获取项目成果列表
+ * 获取项目成果列表（分页）
  * 对应表：posts (type = achievement, status = published)
  * 排序：sort_order 优先，发布时间倒序
+ * 返回结构与 API 契约 §3.5 一致：{ list, total, page, size }
+ * page/size 为可选参数，兼容 getProjects() 无参调用
  */
-export async function getProjects(db) {
+export async function getProjects(page = 1, size = 10, db) {
   const prisma = await pickDb(db)
-  const list = await prisma.post.findMany({
-    where: { type: 'achievement', status: 'published' },
-    orderBy: ORDER_BY.achievement,
-    select: { title: true, summary: true, slug: true, publishedAt: true }
-  })
+  const { page: p, size: s } = normalizePagination(page, size)
 
-  const items = list.map((p) => ({
-    title: p.title,
-    desc: p.summary || '',
-    date: dateOnly(p.publishedAt),
-    slug: p.slug
+  const [total, rows] = await Promise.all([
+    prisma.post.count({ where: { type: 'achievement', status: 'published' } }),
+    prisma.post.findMany({
+      where: { type: 'achievement', status: 'published' },
+      orderBy: ORDER_BY.achievement,
+      skip: (p - 1) * s,
+      take: s,
+      select: { id: true, title: true, summary: true, content: true, publishedAt: true }
+    })
+  ])
+
+  const list = rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    summary: row.summary || '',
+    content: row.content || '',
+    publishedAt: formatDateTime(row.publishedAt)
   }))
 
-  return {
-    items,
-    total: items.length,
-    page: 1,
-    pageSize: 20
-  }
+  return { list, total, page: p, size: s }
 }
 
 /**
  * 获取公告动态列表（分页）
  * 对应表：posts (type = announcement, status = published)
- * 排序：置顶优先，发布时间倒序
+ * 排序：置顶优先，发布时间倒序（is_pinned 仅用于排序，不作为字段输出）
  * 分页在数据库侧完成，不允许查全表后内存分页
+ * 返回结构与 API 契约 §3.6 一致：{ list, total, page, size }
  */
-export async function getNews(page = 1, pageSize = 20, db) {
+export async function getNews(page = 1, size = 10, db) {
   const prisma = await pickDb(db)
-  const { page: p, pageSize: ps } = normalizePagination(page, pageSize)
+  const { page: p, size: s } = normalizePagination(page, size)
 
   const [total, rows] = await Promise.all([
     prisma.post.count({ where: { type: 'announcement', status: 'published' } }),
     prisma.post.findMany({
       where: { type: 'announcement', status: 'published' },
       orderBy: ORDER_BY.announcement,
-      skip: (p - 1) * ps,
-      take: ps,
-      select: { title: true, summary: true, slug: true, publishedAt: true, isPinned: true }
+      skip: (p - 1) * s,
+      take: s,
+      select: { id: true, title: true, summary: true, content: true, publishedAt: true }
     })
   ])
 
-  const items = rows.map((r) => ({
-    title: r.title,
-    desc: r.summary || '',
-    date: dateOnly(r.publishedAt),
-    slug: r.slug,
-    pinned: r.isPinned
+  const list = rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    summary: row.summary || '',
+    content: row.content || '',
+    publishedAt: formatDateTime(row.publishedAt)
   }))
 
-  return { items, total, page: p, pageSize: ps }
+  return { list, total, page: p, size: s }
 }
 
 /**
@@ -234,28 +240,30 @@ export async function getNews(page = 1, pageSize = 20, db) {
  * 对应表：posts (type = recruitment, status = published)
  * 排序：sort_order 优先，发布时间倒序
  * 分页在数据库侧完成
+ * 返回结构与 API 契约 §3.7 一致：{ list, total, page, size }
  */
-export async function getRecruitment(page = 1, pageSize = 20, db) {
+export async function getRecruitment(page = 1, size = 10, db) {
   const prisma = await pickDb(db)
-  const { page: p, pageSize: ps } = normalizePagination(page, pageSize)
+  const { page: p, size: s } = normalizePagination(page, size)
 
   const [total, rows] = await Promise.all([
     prisma.post.count({ where: { type: 'recruitment', status: 'published' } }),
     prisma.post.findMany({
       where: { type: 'recruitment', status: 'published' },
       orderBy: ORDER_BY.recruitment,
-      skip: (p - 1) * ps,
-      take: ps,
-      select: { title: true, summary: true, slug: true, publishedAt: true }
+      skip: (p - 1) * s,
+      take: s,
+      select: { id: true, title: true, summary: true, content: true, publishedAt: true }
     })
   ])
 
-  const items = rows.map((r) => ({
-    title: r.title,
-    desc: r.summary || '',
-    date: dateOnly(r.publishedAt),
-    slug: r.slug
+  const list = rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    summary: row.summary || '',
+    content: row.content || '',
+    publishedAt: formatDateTime(row.publishedAt)
   }))
 
-  return { items, total, page: p, pageSize: ps }
+  return { list, total, page: p, size: s }
 }

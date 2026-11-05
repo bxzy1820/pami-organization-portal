@@ -64,7 +64,7 @@ npx prisma migrate deploy
 node ../database/scripts/import-data.js --set=mock --reset     # 开发联调
 
 cd ..
-npm test                        # 63/63 通过
+npm test                        # 62/62 通过
 ```
 
 正式数据改用 `--set=initial`。
@@ -85,7 +85,7 @@ npm test                        # 63/63 通过
 
 ## 5. 冻结的 Repository 接口
 
-**签名与返回结构已与后端 mockRepository.js 完全对齐**，服务层直接替换 import 即可，无需改业务代码。
+**函数签名与后端 mockRepository.js 兼容；返回字段名以 `docs/API接口契约_v1.0.md` 为准**，服务层直接替换 import 即可，无需改业务代码。
 
 ```js
 // 服务层这样引入：
@@ -95,13 +95,17 @@ import { getSite, getHome, getAbout, getBusiness,
 
 | 函数 | 入参 | 返回 | 说明 |
 | --- | --- | --- | --- |
-| `getSite()` | — | `{ orgName, orgShortName, intro, mission, teamIntro, contact:{email,address}, externalLinks:[{name,url}] }` | 站点基础信息 + 外链 |
-| `getHome()` | — | `{ orgName, slogan, briefIntro, directions:[{title,desc}] }` | 首页内容 + 研究方向 |
-| `getAbout()` | — | `{ intro, mission, teamIntro, contact:{email,address} }` | 关于我们（不含成员资料） |
-| `getBusiness()` | — | `{ list:[{title,desc}] }` | 研究方向列表 |
-| `getProjects()` | — | `{ items:[], total:0, page:1, pageSize:20 }` | 空栏目返回 preparing |
-| `getNews(page, pageSize)` | 可选，默认 1/20 | `{ items:[], total, page, pageSize }` | **置顶优先** + 发布时间倒序 |
-| `getRecruitment(page, pageSize)` | 可选，默认 1/20 | `{ items:[], total, page, pageSize }` | sortOrder 优先 + 发布时间倒序 |
+| `getSite()` | — | `{ orgName, orgShortName, intro, mission, teamIntro, contact:{email,address}, externalLinks:[{name,url}] }` | 站点基础信息 + 外链（契约 §3.1） |
+| `getHome()` | — | `{ orgName, slogan, briefIntro, directions:[{title,desc}] }` | 首页内容 + 研究方向（契约 §3.2） |
+| `getAbout()` | — | `{ intro, mission, teamIntro, contact:{email,address} }` | 关于我们（不含成员资料，契约 §3.3） |
+| `getBusiness()` | — | `{ list:[{title,desc}] }` | 研究方向列表（契约 §3.4） |
+| `getProjects(page, size)` | 可选，默认 1/10 | `{ list:[{id,title,summary,content,publishedAt}], total, page, size }` | 契约 §3.5 |
+| `getNews(page, size)` | 可选，默认 1/10 | `{ list:[{id,title,summary,content,publishedAt}], total, page, size }` | **置顶优先** + 发布时间倒序（契约 §3.6） |
+| `getRecruitment(page, size)` | 可选，默认 1/10 | `{ list:[{id,title,summary,content,publishedAt}], total, page, size }` | sortOrder 优先 + 发布时间倒序（契约 §3.7） |
+
+- 分页：`page` 最小 1，`size` 默认 10、最大 50（契约约定），数据库侧 `skip/take` 分页。
+- 列表元素时间字段 `publishedAt` 输出格式 `YYYY-MM-DD HH:mm:ss`。
+- 公告 `is_pinned` 仅用于排序（置顶优先），不作为字段输出（契约未定义该字段）。
 
 排序规则在数据层完成，**不允许**服务层查全部后内存分页/排序。
 
