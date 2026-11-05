@@ -1,0 +1,247 @@
+﻿
+> pami-data-layer@0.1.0 test
+> node --test
+
+{"ts":"2026-11-05T05:57:18.721Z","level":"info","method":"GET","url":"/api/v1/site","status":200,"ms":"1.02"}
+▶ Middleware CORS
+  ✔ 白名单内的 Origin 被允许 (2.5257ms)
+  ✔ 白名单外的 Origin 不回写 (0.7745ms)
+  ✔ OPTIONS 返回 204 (0.5166ms)
+✔ Middleware CORS (6.7517ms)
+▶ Middleware Logger
+  ✔ 正常路径记录访问日志 (3.0762ms)
+  ✔ /health 不记录 (0.6109ms)
+✔ Middleware Logger (4.4231ms)
+▶ Middleware Validate
+  ✔ 正常分页被归一化 (3.0031ms)
+  ✔ pageSize 超过 100 被截断 (0.4834ms)
+  ✔ page=0 被提升到 1 (0.6615ms)
+✔ Middleware Validate (5.0851ms)
+▶ Middleware Error Handler
+  ✔ ApiError 按 status 返回，并打 error 日志 (1.4304ms)
+  ✔ 未知 Prisma P2025 映射为 404 (3.0767ms)
+  ✔ 未知错误兜底 500 (0.4258ms)
+✔ Middleware Error Handler (5.5811ms)
+▶ Middleware Not Found
+  ✔ 返回 404 + JSON (0.2236ms)
+✔ Middleware Not Found (0.3411ms)
+▶ Repository getSite
+  ✖ 返回 orgName / orgShortName / intro / mission / teamIntro / contact / externalLinks (3.7627ms)
+  ✖ site_settings 不存在返回 null (1.5292ms)
+✖ Repository getSite (7.0111ms)
+▶ Repository getHome
+  ✔ 返回 orgName / slogan / briefIntro / directions[] (1.9652ms)
+  ✔ directions 只返回 isActive=true (0.7726ms)
+✔ Repository getHome (3.171ms)
+▶ Repository getAbout
+  ✔ 返回 intro / mission / teamIntro / contact (2.91ms)
+  ✖ site_settings 不存在时返回空字段默认值 (0.8937ms)
+✖ Repository getAbout (4.2713ms)
+▶ Repository getBusiness
+  ✔ 返回 { list:[{title,desc}] } 结构 (0.7131ms)
+✔ Repository getBusiness (1.0629ms)
+▶ Repository getProjects
+  ✔ 只查 type=achievement + status=published (0.9488ms)
+  ✔ 空栏目返回 items=[] + total=0 (0.3412ms)
+  ✔ published 成果按 sortOrder ASC + publishedAt DESC 排序 (0.4279ms)
+✔ Repository getProjects (2.2645ms)
+▶ Repository getNews
+  ✔ 默认 page=1 pageSize=20 (1.1862ms)
+  ✔ 只返回 status=published，draft/offline 不外泄 (0.2734ms)
+  ✔ 置顶公告优先于发布时间更新的未置顶公告 (0.2219ms)
+  ✔ 越界分页不抛错，返回空 items + total 仍正确 (0.1741ms)
+  ✔ 分页参数非法（0 或负数）会被归一化到 1 (0.2041ms)
+✔ Repository getNews (2.3874ms)
+▶ Repository getRecruitment
+  ✔ 按 sortOrder ASC + publishedAt DESC 排序 (1.097ms)
+  ✔ 空栏目返回 items=[] + total=0 (1.2306ms)
+  ✔ 第二页返回正确 (0.8023ms)
+✔ Repository getRecruitment (3.5126ms)
+▶ Repository 字段映射
+  ✔ news items 包含 date(YYYY-MM-DD) 与 pinned 字段 (0.8456ms)
+  ✔ projects items 不暴露 isPinned 字段（成果不置顶） (0.3796ms)
+✔ Repository 字段映射 (1.5059ms)
+▶ Schema 一致性
+  ✔ Prisma 包含 5 张模型 (5.1299ms)
+  ✖ 迁移脚本包含 5 张表 (3.3865ms)
+  ✔ 兜底 schema.sql 包含同样 5 张表 (0.2489ms)
+  ✖ 迁移与兜底的 posts 字段完全一致 (0.239ms)
+  ✖ posts 包含 is_pinned 字段（冻结接口需要置顶） (0.2048ms)
+  ✔ Prisma 枚举：PostType 三种 + PostStatus 三种 (0.2237ms)
+  ✔ 迁移 SQL 的 posts 表包含全部枚举值 (0.3043ms)
+  ✔ posts 索引覆盖 (type, status, published_at) (0.1667ms)
+  ✔ site_settings 的 id 固定为 1 且唯一 (0.2215ms)
+  ✔ 数据字典覆盖 5 张表 (0.5265ms)
+  ✔ 数据字典说明公告置顶优先排序 (0.2628ms)
+✖ Schema 一致性 (15.5983ms)
+▶ 种子数据: 通用约束
+  ✔ mock - 不出现个人姓名或财务关键词 (2.1299ms)
+  ✔ mock - 邮箱符合正则 (0.3782ms)
+  ✔ mock - 方向 code 唯一且可读 (0.4618ms)
+  ✔ mock - 文章 slug 唯一 (0.2469ms)
+  ✔ mock - 文章 type 属于枚举 (0.4569ms)
+  ✔ mock - 文章 isPinned 仅出现在公告上 (0.5076ms)
+  ✔ mock - 图片路径为空或前端静态路径，不出现外链图片 (0.4742ms)
+  ✔ initial - 不出现个人姓名或财务关键词 (0.4205ms)
+  ✔ initial - 邮箱符合正则 (0.3122ms)
+  ✔ initial - 方向 code 唯一且可读 (0.4406ms)
+  ✔ initial - 文章 slug 唯一 (0.3155ms)
+  ✔ initial - 文章 type 属于枚举 (0.298ms)
+  ✔ initial - 文章 isPinned 仅出现在公告上 (0.1577ms)
+  ✔ initial - 图片路径为空或前端静态路径，不出现外链图片 (0.1942ms)
+✔ 种子数据: 通用约束 (10.334ms)
+▶ 种子数据: initial
+  ✔ posts 为空数组（正式上线前暂不发布） (3.2378ms)
+  ✔ contactEmail 为空（未确认可公开前保持空） (0.2026ms)
+✔ 种子数据: initial (3.7025ms)
+ℹ tests 59
+ℹ suites 16
+ℹ pass 53
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 490.3789
+
+✖ failing tests:
+
+test at tests\repository.test.js:15:3
+✖ 返回 orgName / orgShortName / intro / mission / teamIntro / contact / externalLinks (3.7627ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '河北保定河北大学河北省保定市'
+  - '河北大学河北省保定市'
+       ^
+  
+      at TestContext.<anonymous> (file:///C:/Users/28201/Desktop/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ceshi/tests/repository.test.js:25:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '河北保定河北大学河北省保定市',
+    expected: '河北大学河北省保定市',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\repository.test.js:29:3
+✖ site_settings 不存在返回 null (1.5292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   contact: {
+  +     address: '河北保定河北大学河北省保定市',
+  +     email: 'test@pami.dev'
+  +   },
+  +   externalLinks: [
+  +     {
+  +       name: '内部平台',
+  +       url: 'http://example.com/'
+  +     }
+  +   ],
+  +   intro: '测试简介',
+  +   mission: '我们的使命',
+  +   orgName: '测试组织',
+  +   orgShortName: '测试',
+  +   teamIntro: '团队整体介绍'
+  + }
+  - null
+  
+      at TestContext.<anonymous> (file:///C:/Users/28201/Desktop/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ceshi/tests/repository.test.js:32:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { orgName: '测试组织', orgShortName: '测试', intro: '测试简介', mission: '我们的使命', teamIntro: '团队整体介绍', contact: { email: 'test@pami.dev', address: '河北保定河北大学河北省保定市' }, externalLinks: [ [Object] ] },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\repository.test.js:76:3
+✖ site_settings 不存在时返回空字段默认值 (0.8937ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      contact: {
+  +     address: '河北保定河北大学河北省保定市',
+  +     email: 'test@pami.dev'
+  -     address: '',
+  -     email: ''
+      },
+  +   intro: '测试简介',
+  +   mission: '我们的使命',
+  +   teamIntro: '团队整体介绍'
+  -   intro: '',
+  -   mission: '',
+  -   teamIntro: ''
+    }
+  
+      at TestContext.<anonymous> (file:///C:/Users/28201/Desktop/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ceshi/tests/repository.test.js:79:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { intro: '测试简介', mission: '我们的使命', teamIntro: '团队整体介绍', contact: { email: 'test@pami.dev', address: '河北保定河北大学河北省保定市' } },
+    expected: { intro: '', mission: '', teamIntro: '', contact: { email: '', address: '' } },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\schema-consistency.test.js:102:3
+✖ 迁移脚本包含 5 张表 (3.3865ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   's'
+  -   'business_directions',
+  -   'external_links',
+  -   'media_files',
+  -   'posts',
+  -   'site_settings'
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/Users/28201/Desktop/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ceshi/tests/schema-consistency.test.js:103:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 's' ],
+    expected: [ 'business_directions', 'external_links', 'media_files', 'posts', 'site_settings' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\schema-consistency.test.js:111:3
+✖ 迁移与兜底的 posts 字段完全一致 (0.239ms)
+  TypeError: Cannot read properties of undefined (reading 'sort')
+      at TestContext.<anonymous> (file:///C:/Users/28201/Desktop/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ceshi/tests/schema-consistency.test.js:112:38)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests\schema-consistency.test.js:115:3
+✖ posts 包含 is_pinned 字段（冻结接口需要置顶） (0.2048ms)
+  TypeError: Cannot read properties of undefined (reading 'includes')
+      at TestContext.<anonymous> (file:///C:/Users/28201/Desktop/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ceshi/tests/schema-consistency.test.js:116:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7)

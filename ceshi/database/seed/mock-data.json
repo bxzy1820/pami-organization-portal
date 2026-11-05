@@ -1,0 +1,100 @@
+{
+  "siteSetting": {
+    "orgName": "AnySome组织门户",
+    "shortName": "葩米科技",
+    "brandSub": "共创空间，数字生态",
+    "region": "河北保定",
+    "park": "河北大学",
+    "address": "河北省保定市莲池区河北大学",
+    "addressNote": "保定市莲池区",
+    "slogan": "汇聚创新力量，共建组织未来",
+    "intro": "这是一份开发联调用的模拟数据。正式上线前请用 initial 数据覆盖。",
+    "contactEmail": "test@pami.dev",
+    "hero": { "titleLines": ["汇聚创新力量", "共建数字生态组织"] },
+    "statement": { "eyebrow": "关于我们", "lead": "这是一个充满活力的创新组织门户。", "text": "我们致力于连接每一位成员，激发团队潜能。" },
+    "mission": { "title": "我们的使命", "lines": ["连接无限可能，", "与伙伴一起解决长期问题。"], "text": "我们关注每一次真实的协作与成长。" },
+    "team": { "title": "团队", "intro": "团队按职能协作，覆盖从技术研究、工程实现到场景落地的全过程。" }
+  },
+  "businessDirections": [
+    { "code": "algorithm", "title": "核心领域探索", "summary": "围绕实际需求开展深度探索与应用落地。", "sortOrder": 1 },
+    { "code": "solution", "title": "行业智能化方案探索", "summary": "从行业场景出发梳理需求、设计并验证方案。", "sortOrder": 2 },
+    { "code": "data", "title": "信息与知识管理", "summary": "协助组织梳理核心资源、建立信息规范。", "sortOrder": 3 },
+    { "code": "cocreation", "title": "外部合作与联合共创", "summary": "与各类伙伴共建课题与创新项目。", "sortOrder": 4 }
+  ],
+  "externalLinks": [
+    { "name": "内部协作平台", "url": "http://124.223.224.129:8080/", "desc": "组织的技能与能力平台", "primary": true, "sortOrder": 1 },
+    { "name": "河北省保定市", "url": "https://www.baoding.gov.cn/", "desc": "河北大学 AnySome", "sortOrder": 2 }
+  ],
+  "posts": [
+    {
+      "slug": "announcement-pinned-001",
+      "type": "announcement",
+      "status": "published",
+      "title": "【测试】置顶公告：欢迎加入 AnySome 测试阶段",
+      "summary": "这条公告用于测试置顶排序。",
+      "publishedAt": "2026-11-02T10:00:00+08:00",
+      "sortOrder": 0,
+      "isPinned": true
+    },
+    {
+      "slug": "announcement-draft-001",
+      "type": "announcement",
+      "status": "draft",
+      "title": "【测试】草稿公告（不对外返回）",
+      "summary": "仅内部查看。",
+      "publishedAt": null,
+      "sortOrder": 0,
+      "isPinned": false
+    },
+    {
+      "slug": "announcement-002",
+      "type": "announcement",
+      "status": "published",
+      "title": "【测试】普通公告：v1 数据层交付完成",
+      "summary": "数据层已按冻结接口完成，可联调。",
+      "publishedAt": "2026-11-01T10:00:00+08:00",
+      "sortOrder": 0,
+      "isPinned": false
+    },
+    {
+      "slug": "achievement-001",
+      "type": "achievement",
+      "status": "published",
+      "title": "【测试】成果一：Prisma 数据层",
+      "summary": "冻结 7 个 Repository 接口，全部通过单元测试。",
+      "publishedAt": "2026-10-25T10:00:00+08:00",
+      "sortOrder": 0,
+      "isPinned": false
+    },
+    {
+      "slug": "achievement-002",
+      "type": "achievement",
+      "status": "published",
+      "title": "【测试】成果二：无依赖中间件",
+      "summary": "CORS / 日志 / 校验 / 统一错误，无第三方依赖。",
+      "publishedAt": "2026-10-20T10:00:00+08:00",
+      "sortOrder": 0,
+      "isPinned": false
+    },
+    {
+      "slug": "recruitment-001",
+      "type": "recruitment",
+      "status": "published",
+      "title": "【测试】招聘：后端数据层负责人",
+      "summary": "负责 Prisma 模型、Repository 与迁移。",
+      "publishedAt": "2026-11-01T10:00:00+08:00",
+      "sortOrder": 0,
+      "isPinned": false
+    },
+    {
+      "slug": "recruitment-002",
+      "type": "recruitment",
+      "status": "published",
+      "title": "【测试】招聘：前端工程师",
+      "summary": "Vue 3 + Vite，与数据层联调。",
+      "publishedAt": "2026-10-28T10:00:00+08:00",
+      "sortOrder": 0,
+      "isPinned": false
+    }
+  ]
+}

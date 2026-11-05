@@ -1,0 +1,28 @@
+{
+  "siteSetting": {
+    "orgName": "AnySome组织门户",
+    "shortName": "葩米科技",
+    "brandSub": "共创空间，数字生态",
+    "region": "河北保定",
+    "park": "河北大学",
+    "address": "河北省保定市莲池区河北大学",
+    "addressNote": "保定市莲池区",
+    "slogan": "汇聚创新力量，共建组织未来",
+    "intro": "我们的组织致力于打造开发、协作、共赢的生态平台。通过整合优质资源与前沿技术，我们不断探索行业新边界。",
+    "contactEmail": "",
+    "hero": { "titleLines": ["汇聚创新力量", "共建数字生态组织"] },
+    "statement": { "eyebrow": "关于我们", "lead": "这是一个充满活力的创新组织门户。", "text": "我们致力于连接每一位成员，激发团队潜能。" },
+    "mission": { "title": "我们的使命", "lines": ["连接无限可能，", "与伙伴一起解决长期问题。"], "text": "我们关注每一次真实的协作与成长。从发现需求、汇聚资源到反复验证，我们把每一步做实。" },
+    "team": { "title": "团队", "intro": "团队按职能协作，覆盖从技术研究、工程实现到场景落地的全过程。成员个人资料将在确认可公开后补充。" }
+  },
+  "businessDirections": [
+    { "code": "algorithm", "title": "核心领域探索", "summary": "围绕实际需求开展深度探索与应用落地，涵养从概念验证到成果转化的完整链路。", "sortOrder": 1 },
+    { "code": "solution", "title": "行业智能化方案探索", "summary": "从行业场景出发梳理需求、设计并验证方案，重视可用性与长期可维护性。", "sortOrder": 2 },
+    { "code": "data", "title": "信息与知识管理", "summary": "协助组织梳理核心资源、建立信息规范，让沉淀的知识真正支撑管理与决策。", "sortOrder": 3 },
+    { "code": "cocreation", "title": "外部合作与联合共创", "summary": "与各类伙伴共建课题与创新项目，推动合作在实际场景中验证与转化。", "sortOrder": 4 }
+  ],
+  "externalLinks": [
+    { "name": "内部协作平台", "url": "http://124.223.224.129:8080/", "desc": "组织的技能与能力平台", "primary": true, "sortOrder": 1 }
+  ],
+  "posts": []
+}

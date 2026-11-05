@@ -1,0 +1,22 @@
+{
+  "name": "pami-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed:mock": "node ../database/scripts/import-data.js --set=mock",
+    "db:seed:initial": "node ../database/scripts/import-data.js --set=initial",
+    "db:reset:mock": "node ../database/scripts/import-data.js --set=mock --reset",
+    "db:reset:initial": "node ../database/scripts/import-data.js --set=initial --reset"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "prisma": "^6.0.0"
+  },
+  "prisma": {
+    "seed": "node ../database/scripts/import-data.js --set=mock"
+  }
+}
