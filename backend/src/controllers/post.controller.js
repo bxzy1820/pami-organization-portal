@@ -1,19 +1,29 @@
-import { success, BizError, ErrorCode } from '../common/response.js';
-import { getPostList } from '../services/post.service.js';
+// post.controller.js
+// 接收请求、解析参数、调用 service、统一返回
 
+import { success } from '../common/response.js';
+import {
+  getProjects as fetchProjects,
+  getNews as fetchNews,
+  getRecruitment as fetchRecruitment,
+} from '../services/post.service.js';
+
+/**
+ * 解析分页参数
+ * v1.1 约定：page 默认1最小1；pageSize 默认20最小1最大100
+ */
 function parsePagination(query) {
   let page = parseInt(query.page, 10);
-  let size = parseInt(query.size, 10);
+  let pageSize = parseInt(query.pageSize, 10);
   if (isNaN(page) || page < 1) page = 1;
-  if (isNaN(size) || size < 1) size = 10;
-  if (size > 50) size = 50; // 契约已定稿：最大 50
-  return { page, size };
+  if (isNaN(pageSize) || pageSize < 1) pageSize = 20;
+  if (pageSize > 100) pageSize = 100;
+  return { page, pageSize };
 }
 
 export async function getProjects(req, res, next) {
   try {
-    const { page, size } = parsePagination(req.query);
-    const data = await getPostList('achievement', page, size);
+    const data = await fetchProjects();
     return success(res, data);
   } catch (err) {
     next(err);
@@ -22,8 +32,8 @@ export async function getProjects(req, res, next) {
 
 export async function getNews(req, res, next) {
   try {
-    const { page, size } = parsePagination(req.query);
-    const data = await getPostList('announcement', page, size);
+    const { page, pageSize } = parsePagination(req.query);
+    const data = await fetchNews(page, pageSize);
     return success(res, data);
   } catch (err) {
     next(err);
@@ -32,8 +42,8 @@ export async function getNews(req, res, next) {
 
 export async function getRecruitment(req, res, next) {
   try {
-    const { page, size } = parsePagination(req.query);
-    const data = await getPostList('recruitment', page, size);
+    const { page, pageSize } = parsePagination(req.query);
+    const data = await fetchRecruitment(page, pageSize);
     return success(res, data);
   } catch (err) {
     next(err);

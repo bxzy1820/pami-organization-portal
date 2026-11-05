@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger.js';
 import { apiRouter } from './routes/index.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { logger } from './middleware/logger.js';
 
 dotenv.config();
 
@@ -13,7 +14,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const API_PREFIX = process.env.API_PREFIX || '/api/v1';
 
+// 请求日志（放在最前面，记录所有请求）
+app.use(logger);
+
+// CORS 跨域
 app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }));
+
+// 解析 JSON 请求体
 app.use(express.json());
 
 // Swagger 在线文档

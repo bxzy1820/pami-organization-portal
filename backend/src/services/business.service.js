@@ -1,10 +1,8 @@
 // business.service.js
-// TODO: 对接 C 的 businessRepository
+// 业务组装层：调用 Repository 获取数据，做简单加工
+
+import * as repository from '../repositories/mockRepository.js';
+
 export async function getBusinessList() {
-  return {
-    list: [
-      { title: '【测试数据】方向一', desc: '方向描述' },
-      { title: '【测试数据】方向二', desc: '方向描述' },
-    ],
-  };
+  return await repository.getBusiness();
 }

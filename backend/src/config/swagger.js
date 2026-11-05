@@ -1,10 +1,10 @@
 // swagger.js — 硬编码完整 OpenAPI 3.0 规范
-// 对照 docs/API接口契约_v1.0.md 写，所有接口已定义
+// 对照 v1.1 任务分配的分页约定：pageSize 默认20最大100，返回 items/total/page/pageSize
 export const swaggerSpec = {
   openapi: '3.0.0',
   info: {
     title: '葩米科技组织门户 API',
-    version: '1.0.0',
+    version: '1.1.0',
     description: '一期公开只读接口，无鉴权，统一返回 {code,message,data}',
   },
   servers: [
@@ -117,11 +117,7 @@ export const swaggerSpec = {
     '/api/v1/projects': {
       get: {
         tags: ['项目成果'],
-        summary: '获取项目成果列表（分页）',
-        parameters: [
-          { name: 'page', in: 'query', schema: { type: 'integer', default: 1 }, description: '页码' },
-          { name: 'size', in: 'query', schema: { type: 'integer', default: 10, maximum: 50 }, description: '每页条数，最大50' },
-        ],
+        summary: '获取项目成果列表',
         responses: {
           200: {
             description: '统一返回',
@@ -131,12 +127,12 @@ export const swaggerSpec = {
                   code: 0,
                   message: 'ok',
                   data: {
-                    list: [
+                    items: [
                       { id: 1, title: '项目成果标题', summary: '摘要', content: '正文', publishedAt: '2026-11-04 10:00:00' },
                     ],
-                    total: 1,
+                    total: 0,
                     page: 1,
-                    size: 10,
+                    pageSize: 20,
                   },
                 },
               },
@@ -150,8 +146,8 @@ export const swaggerSpec = {
         tags: ['公告动态'],
         summary: '获取公告动态列表（分页）',
         parameters: [
-          { name: 'page', in: 'query', schema: { type: 'integer', default: 1 }, description: '页码' },
-          { name: 'size', in: 'query', schema: { type: 'integer', default: 10, maximum: 50 }, description: '每页条数，最大50' },
+          { name: 'page', in: 'query', schema: { type: 'integer', default: 1, minimum: 1 }, description: '页码，默认1，最小1' },
+          { name: 'pageSize', in: 'query', schema: { type: 'integer', default: 20, minimum: 1, maximum: 100 }, description: '每页条数，默认20，最小1，最大100' },
         ],
         responses: {
           200: {
@@ -162,12 +158,12 @@ export const swaggerSpec = {
                   code: 0,
                   message: 'ok',
                   data: {
-                    list: [
+                    items: [
                       { id: 2, title: '公告标题', summary: '摘要', content: '正文', publishedAt: '2026-11-04 10:00:00' },
                     ],
-                    total: 1,
+                    total: 0,
                     page: 1,
-                    size: 10,
+                    pageSize: 20,
                   },
                 },
               },
@@ -181,8 +177,8 @@ export const swaggerSpec = {
         tags: ['加入我们'],
         summary: '获取招聘列表（分页）',
         parameters: [
-          { name: 'page', in: 'query', schema: { type: 'integer', default: 1 }, description: '页码' },
-          { name: 'size', in: 'query', schema: { type: 'integer', default: 10, maximum: 50 }, description: '每页条数，最大50' },
+          { name: 'page', in: 'query', schema: { type: 'integer', default: 1, minimum: 1 }, description: '页码，默认1，最小1' },
+          { name: 'pageSize', in: 'query', schema: { type: 'integer', default: 20, minimum: 1, maximum: 100 }, description: '每页条数，默认20，最小1，最大100' },
         ],
         responses: {
           200: {
@@ -193,12 +189,12 @@ export const swaggerSpec = {
                   code: 0,
                   message: 'ok',
                   data: {
-                    list: [
+                    items: [
                       { id: 3, title: '岗位名称', summary: '岗位要求', content: '岗位详情', publishedAt: '2026-11-04 10:00:00' },
                     ],
-                    total: 1,
+                    total: 0,
                     page: 1,
-                    size: 10,
+                    pageSize: 20,
                   },
                 },
               },

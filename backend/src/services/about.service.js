@@ -1,13 +1,8 @@
 // about.service.js
-// TODO: 对接 C 的 siteRepository
+// 业务组装层：调用 Repository 获取数据，做简单加工
+
+import * as repository from '../repositories/mockRepository.js';
+
 export async function getAboutInfo() {
-  return {
-    intro: '【测试数据】组织简介。',
-    mission: '【测试数据】使命与定位。',
-    teamIntro: '【测试数据】团队整体介绍，不包含成员姓名、头像、履历等个人资料。',
-    contact: {
-      email: 'contact@pami.com',
-      address: '河北省保定市×××',
-    },
-  };
+  return await repository.getAbout();
 }
