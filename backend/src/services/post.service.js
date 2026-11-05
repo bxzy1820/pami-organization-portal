@@ -1,21 +1,29 @@
 // post.service.js
-// projects / news / recruitment 共用：按 type 查文章，分页，只返回 published
-// TODO: 对接 C 的 postRepository.findPublishedByType(type, page, size)
+// projects / news / recruitment 共用：按 type 调用 Repository
+// 业务组装层：不写死数据，不直接操作数据库，只调用 Repository
 
-// mock 数据：一期三类文章暂不导正式记录，默认返回空列表，前端显示"内容正在整理中"
-const MOCK_DB = {
-  achievement: [], // 项目成果
-  announcement: [], // 公告动态
-  recruitment: [], // 加入我们
-};
+import * as repository from '../repositories/mockRepository.js';
 
-export async function getPostList(type, page, size) {
-  // 一期 mock：空数据，返回契约规定的分页空结构
-  const list = MOCK_DB[type] || [];
-  return {
-    list,
-    total: list.length,
-    page,
-    size,
-  };
+/**
+ * 获取项目成果列表
+ * Repository: getProjects()
+ */
+export async function getProjects() {
+  return await repository.getProjects();
+}
+
+/**
+ * 获取公告动态列表（分页）
+ * Repository: getNews(page, pageSize)
+ */
+export async function getNews(page, pageSize) {
+  return await repository.getNews(page, pageSize);
+}
+
+/**
+ * 获取招聘列表（分页）
+ * Repository: getRecruitment(page, pageSize)
+ */
+export async function getRecruitment(page, pageSize) {
+  return await repository.getRecruitment(page, pageSize);
 }
