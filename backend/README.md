@@ -6,7 +6,7 @@
 - Node.js + Express
 - ESM（`"type": "module"`）
 - Swagger（swagger-jsdoc + swagger-ui-express）
-- 数据库访问层（Prisma / Repository）由 C / 赵天硕 实现，位于 `src/repositories/`
+- 数据库访问层（Prisma / Repository）由数据层负责人实现，位于 `src/repositories/`
 
 ## 目录结构
 ```

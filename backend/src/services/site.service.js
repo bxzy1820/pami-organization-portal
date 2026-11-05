@@ -1,5 +1,5 @@
 // site.service.js
-// TODO: 对接 C（赵天硕）的 repository 后，改为调用 siteRepository.getSiteInfo()
+// TODO: 对接数据层的 repository 后，改为调用 siteRepository.getSiteInfo()
 // 现在先用 mock 数据让接口能跑通，便于联调预览。
 
 export async function getSiteInfo() {

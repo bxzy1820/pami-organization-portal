@@ -595,7 +595,7 @@
 
 ## 5. 附录：数据字典与契约对应关系
 
-> 本表为契约与数据库的对应摘要，供赵天硕（数据层）与李悦涵（后端）对齐使用，完整字段见赵天硕的 
+> 本表为契约与数据库的对应摘要，供数据层与后端对齐使用，完整字段见
 >
 > `database/data-dictionary.md`
 >
@@ -616,7 +616,7 @@
 
 | 契约字段                                                           | 数据库字段                                          | 表                     | 备注                             |
 | -------------------------------------------------------------- | ---------------------------------------------- | --------------------- | ------------------------------ |
-| orgName / orgShortName / intro / mission / teamIntro / contact | 对应字段                                           | `site_settings`       | 字段名以赵天硕数据字典为准                  |
+| orgName / orgShortName / intro / mission / teamIntro / contact | 对应字段                                           | `site_settings`       | 字段名以数据字典为准                      |
 | externalLinks\[].name / url                                    | name / url                                     | `external_links`      | 仅取公开链接                         |
 | directions\[].title / desc                                     | title / desc                                   | `business_directions` |                                |
 | list\[].id / title / summary / content / publishedAt           | id / title / summary / content / published\_at | `posts`               | 过滤 `type` 与 `status=published` |
@@ -637,4 +637,4 @@
 | `content` 内容形式 | 一期为纯文本（text），不使用富文本 HTML；后续可扩展    |
 | 分页 `size` 上限   | 默认 10，最大 50                       |
 
-> 后续任何字段改动由李悦涵同步通知赵天硕和前端负责人。
+> 后续任何字段改动由后端负责人同步通知数据层与前端负责人。
