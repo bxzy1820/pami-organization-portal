@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS external_links (
   sort_order INT NOT NULL DEFAULT 0,
   created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (id),
+  UNIQUE KEY external_links_name_key (name),
   KEY external_links_is_active_sort_order_idx (is_active, sort_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

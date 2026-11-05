@@ -78,6 +78,7 @@ CREATE TABLE `external_links` (
   `sort_order` INT NOT NULL DEFAULT 0,
   `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `external_links_name_key` (`name`),
   INDEX `external_links_is_active_sort_order_idx` (`is_active`, `sort_order`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

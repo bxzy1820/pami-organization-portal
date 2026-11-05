@@ -1,13 +1,12 @@
 // 数据访问层 —— 冻结接口（v1.1）
 // ---------------------------------------------------------------------------
-// 本文件是服务层唯一的 Repository 引入点，函数签名与返回结构与后端冻结的
-// mockRepository.js 完全一致。验收时只需把服务层的 import 从 mock 改到
-// 这里即可，业务代码不需要任何改动。
+// 本文件是服务层唯一的 Repository 引入点，函数签名与返回结构遵循后端
+// v1.1 契约。所有服务默认通过这里访问 Prisma 和 MySQL。
 //
 // 所有查询在数据库侧完成过滤、排序与分页，不允许查全表后内存处理。
 
-import { parseText, dateOnly } from './utils/json.js'
-import { normalizePagination } from './utils/pagination.js'
+import { parseText, dateOnly } from '../utils/json.js'
+import { normalizePagination } from '../utils/pagination.js'
 
 // ============================================================
 // 排序规则（数据层完成，不允许内存排序）
@@ -40,7 +39,7 @@ const ORDER_BY = Object.freeze({
 // @prisma/client 模块缺失错误。测试环境全注入 fake-db 时永远不会进入这里。
 async function pickDb(db) {
   if (db) return db
-  const mod = await import('./prisma/client.js')
+  const mod = await import('../prisma/client.js')
   return mod.getPrisma()
 }
 

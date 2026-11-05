@@ -36,7 +36,7 @@ function loadSeed(setName) {
 
 function sitePayload(site) {
   return {
-    orgName: site.orgName,
+    name: site.orgName,
     shortName: site.shortName || null,
     brandSub: site.brandSub || null,
     region: site.region || null,

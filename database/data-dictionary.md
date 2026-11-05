@@ -86,7 +86,7 @@
 | 字段 | 类型 | 可空 | 默认 | 说明 |
 | --- | --- | --- | --- | --- |
 | `id` | INT | 否 | 自增 | 主键 |
-| `name` | VARCHAR(200) | 否 | — | 链接名称 → `getSite().externalLinks[].name` |
+| `name` | VARCHAR(200) | 否 | — | 唯一；链接名称 → `getSite().externalLinks[].name` |
 | `url` | VARCHAR(500) | 否 | — | URL → `getSite().externalLinks[].url` |
 | `desc` | VARCHAR(500) | 是 | NULL | 描述 |
 | `primary` | BOOLEAN | 否 | false | 主链接高亮 |
@@ -94,7 +94,7 @@
 | `sort_order` | INT | 否 | 0 | 升序 |
 | `created_at` | DATETIME(3) | 否 | 自动 | — |
 
-索引：`(is_active, sort_order)`。
+唯一约束：`name`。索引：`(is_active, sort_order)`。
 
 ---
 

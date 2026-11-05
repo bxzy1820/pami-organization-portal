@@ -6,7 +6,7 @@ import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 import { createFakeDb, defaultPosts } from './helpers/fake-db.js'
 import { getSite, getHome, getAbout, getBusiness,
-         getProjects, getNews, getRecruitment } from '../backend/src/repository.js'
+         getProjects, getNews, getRecruitment } from '../src/repositories/databaseRepository.js'
 
 // ============================================================
 // getSite

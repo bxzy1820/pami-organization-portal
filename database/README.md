@@ -1,18 +1,22 @@
-# Database
+# database/
 
-数据库迁移、初始化脚本和模拟数据放在此目录。
+| 文件 | 说明 |
+| --- | --- |
+| `schema.sql` | 兜底 DDL，无 Prisma 时手工建表用。与 `backend/prisma/schema.prisma` 保持同步 |
+| `data-dictionary.md` | 数据字典，字段/类型/约束/接口映射 |
+| `scripts/import-data.js` | 导入脚本，幂等 upsert。支持 `--set=mock|initial`、`--reset` |
+| `seed/mock-data.json` | 开发联调测试数据 |
+| `seed/initial-data.json` | 正式初始数据（无成员/财务信息，联系邮箱为空） |
 
-一期建议至少包含：
+## 使用
 
-```text
-admins
-site_settings
-members
-business_directions
-posts
-external_links
-media_files
+```bash
+# 方式 A：Prisma 迁移（推荐）
+cd backend
+npx prisma migrate deploy
+node ../database/scripts/import-data.js --set=mock
+
+# 方式 B：直接 SQL
+mysql -u portal_user -p pami_portal < schema.sql
+node scripts/import-data.js --set=mock
 ```
-
-`posts.type` 建议使用 `announcement`、`achievement`、`recruitment`。
-

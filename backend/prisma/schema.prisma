@@ -27,7 +27,7 @@ enum PostStatus {
 model SiteSetting {
   id               Int      @id @default(1)
   name             String   @map("org_name")
-  shortName        String   @map("short_name")
+  shortName        String?  @map("short_name")
   brandSub         String?  @map("brand_sub")
   uscc             String?  @map("uscc")
   region           String?
@@ -99,7 +99,7 @@ model Post {
 /// 外部链接
 model ExternalLink {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   url       String
   desc      String?
   primary   Boolean  @default(false)

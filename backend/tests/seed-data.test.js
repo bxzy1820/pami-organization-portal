@@ -9,8 +9,8 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const MOCK = JSON.parse(readFileSync(resolve(__dirname, '..', 'database', 'seed', 'mock-data.json'), 'utf-8'))
-const INITIAL = JSON.parse(readFileSync(resolve(__dirname, '..', 'database', 'seed', 'initial-data.json'), 'utf-8'))
+const MOCK = JSON.parse(readFileSync(resolve(__dirname, '..', '..', 'database', 'seed', 'mock-data.json'), 'utf-8'))
+const INITIAL = JSON.parse(readFileSync(resolve(__dirname, '..', '..', 'database', 'seed', 'initial-data.json'), 'utf-8'))
 
 // 一期禁止出现在业务数据里的财务关键词（个人姓名通过人工审查保障）
 const FORBIDDEN_TERMS = ['银行', '账户', '开户行']

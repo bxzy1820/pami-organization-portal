@@ -10,12 +10,14 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const root = resolve(__dirname, '..')
+const backendRoot = resolve(__dirname, '..')
+const projectRoot = resolve(backendRoot, '..')
 
-const prismaSrc = readFileSync(resolve(root, 'backend', 'prisma', 'schema.prisma'), 'utf-8')
-const migSql    = readFileSync(resolve(root, 'backend', 'prisma', 'migrations', '20261104000000_init', 'migration.sql'), 'utf-8')
-const ddlSql    = readFileSync(resolve(root, 'database', 'schema.sql'), 'utf-8')
-const dictMd    = readFileSync(resolve(root, 'database', 'data-dictionary.md'), 'utf-8')
+const prismaSrc = readFileSync(resolve(backendRoot, 'prisma', 'schema.prisma'), 'utf-8')
+const migSql    = readFileSync(resolve(backendRoot, 'prisma', 'migrations', '20261104000000_init', 'migration.sql'), 'utf-8')
+const ddlSql    = readFileSync(resolve(projectRoot, 'database', 'schema.sql'), 'utf-8')
+const dictMd    = readFileSync(resolve(projectRoot, 'database', 'data-dictionary.md'), 'utf-8')
+const importer  = readFileSync(resolve(projectRoot, 'database', 'scripts', 'import-data.js'), 'utf-8')
 
 // ============================================================
 // Prisma 解析
@@ -134,6 +136,17 @@ describe('Schema 一致性', () => {
   it('site_settings 的 id 固定为 1 且唯一', () => {
     assert.ok(prismaSrc.includes('@default(1)'))
     assert.ok(migSql.includes('PRIMARY KEY (`id`)'))
+  })
+
+  it('external_links.name 在 Prisma 与两份 SQL 中均为唯一键', () => {
+    assert.match(prismaSrc, /name\s+String\s+@unique/)
+    assert.ok(migSql.includes('external_links_name_key'))
+    assert.ok(ddlSql.includes('external_links_name_key'))
+  })
+
+  it('导入脚本把 seed.orgName 映射到 Prisma 的 name 字段', () => {
+    assert.ok(importer.includes('name: site.orgName'))
+    assert.ok(!importer.includes('orgName: site.orgName'))
   })
 
   it('数据字典覆盖 5 张表', () => {
