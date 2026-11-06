@@ -36,7 +36,20 @@ docker compose --env-file .env.deploy exec -T backend npm run db:reset:mock
 docker compose --env-file .env.deploy exec -T backend npm run db:reset:initial
 ```
 
-默认访问地址为 `http://服务器地址:8081`。MySQL 和后端均不直接暴露公网，前端容器将 `/api/v1` 与 `/api-docs` 反向代理至后端。
+默认以 `/pami/` 为发布路径，前端容器仅绑定服务器回环地址 `127.0.0.1:18081`。宿主机 Nginx 需要将 `/pami/` 反向代理到该地址。MySQL 和后端均不直接暴露公网。
+
+宿主机 Nginx 的 `server` 块中增加：
+
+```nginx
+location ^~ /pami/ {
+    proxy_pass http://127.0.0.1:18081/;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
 
 查看状态和日志：
 

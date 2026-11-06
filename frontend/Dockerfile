@@ -7,7 +7,9 @@ RUN npm ci --no-audit --no-fund
 
 COPY frontend/ ./
 
-ARG VITE_API_BASE_URL=/api/v1
+ARG VITE_BASE_PATH=/pami/
+ARG VITE_API_BASE_URL=/pami/api/v1
+ENV VITE_BASE_PATH=${VITE_BASE_PATH}
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 RUN npm run build

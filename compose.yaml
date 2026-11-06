@@ -50,14 +50,15 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
       args:
-        VITE_API_BASE_URL: /api/v1
+        VITE_BASE_PATH: ${PUBLIC_BASE_PATH:-/pami}/
+        VITE_API_BASE_URL: ${PUBLIC_BASE_PATH:-/pami}/api/v1
     container_name: pami-portal-frontend
     restart: unless-stopped
     depends_on:
       backend:
         condition: service_healthy
     ports:
-      - "${PUBLIC_PORT:-8081}:80"
+      - "127.0.0.1:${FRONTEND_BIND_PORT:-18081}:80"
     networks:
       - pami_internal
 
