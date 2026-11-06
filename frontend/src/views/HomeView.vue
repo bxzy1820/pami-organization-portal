@@ -1,14 +1,39 @@
 <script setup>
-import { ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import TypewriterTitle from "@/components/TypewriterTitle.vue";
 import { site } from "@/data/site";
+import { portalApi } from '@/api/client'
 
 const typed = ref(false);
+const loading = ref(true)
+const error = ref('')
+const home = ref(null)
+const controller = new AbortController()
+
+const heroLines = computed(() => {
+  if (home.value?.slogan) return [home.value.slogan]
+  return site.hero.titleLines
+})
+
+onMounted(async () => {
+  try {
+    home.value = await portalApi.getHome({ signal: controller.signal })
+    if (home.value?.slogan) site.slogan = home.value.slogan
+  } catch (requestError) {
+    if (requestError.name !== 'AbortError') error.value = requestError.message || '首页内容加载失败'
+  } finally {
+    loading.value = false
+  }
+})
+
+onBeforeUnmount(() => controller.abort())
 
 const entries = [
   { label: "关于我们", to: "/about" },
   { label: "研究方向", to: "/business" },
   { label: "项目成果", to: "/projects" },
+  { label: "组织动态", to: "/news" },
+  { label: "加入我们", to: "/recruitment" },
 ];
 
 const arrow = "M6 18L18 6M18 6H9M18 6v9";
@@ -30,7 +55,8 @@ const arrow = "M6 18L18 6M18 6H9M18 6v9";
       <div class="hero__veil" aria-hidden="true"></div>
 
       <div class="container hero__inner">
-        <TypewriterTitle :lines="site.hero.titleLines" @finish="typed = true" />
+        <TypewriterTitle v-if="!loading" :lines="heroLines" @finish="typed = true" />
+        <h1 v-else class="hero__title">正在连接内容服务…</h1>
 
         <div class="hero__foot">
           <router-link
@@ -66,6 +92,30 @@ const arrow = "M6 18L18 6M18 6H9M18 6v9";
           />
         </svg>
       </span>
+    </section>
+
+    <section class="section home-summary">
+      <div class="container">
+        <p v-if="loading" class="api-state" role="status">正在加载首页内容…</p>
+        <div v-else-if="error" class="api-state api-state--error" role="alert">
+          <p>{{ error }}</p>
+          <p>当前展示本地兜底内容，请确认后端服务已经启动。</p>
+        </div>
+        <div v-else>
+          <p class="statement">
+            <strong>{{ home?.orgName || site.name }}</strong>
+            {{ home?.briefIntro || site.statement.text }}
+          </p>
+          <div v-if="home?.directions?.length" class="home-directions">
+            <article v-for="(item, index) in home.directions" :key="`${item.title}-${index}`" class="home-direction">
+              <p class="home-direction__num">{{ String(index + 1).padStart(2, '0') }}</p>
+              <h2>{{ item.title }}</h2>
+              <p>{{ item.desc }}</p>
+            </article>
+          </div>
+          <p v-else class="api-state api-state--empty">暂无研究方向数据。</p>
+        </div>
+      </div>
     </section>
 
     <!-- 栏目目录 -->

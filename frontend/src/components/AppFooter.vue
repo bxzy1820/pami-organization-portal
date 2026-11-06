@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { externalLinks, site } from '@/data/site'
 
 const year = new Date().getFullYear()
-const email = site.contact.email
+const email = computed(() => site.contact.email)
 
-const groups = [
+const groups = computed(() => [
   {
     key: 'about',
     title: '关于',
@@ -26,10 +26,10 @@ const groups = [
     links: [
       { label: '项目成果', to: '/projects' },
       ...externalLinks.map((link) => ({ label: link.label, href: link.url, external: true })),
-      ...(email ? [{ label: email, href: `mailto:${email}` }] : [])
+      ...(email.value ? [{ label: email.value, href: `mailto:${email.value}` }] : [])
     ]
   }
-]
+])
 
 const openKeys = ref([])
 

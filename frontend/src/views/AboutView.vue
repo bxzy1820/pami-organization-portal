@@ -1,9 +1,33 @@
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { site } from '@/data/site'
+import { portalApi } from '@/api/client'
 
 const about = site.about
 const values = about.values
+const loading = ref(true)
+const error = ref('')
+const controller = new AbortController()
+
+onMounted(async () => {
+  try {
+    const data = await portalApi.getAbout({ signal: controller.signal })
+    if (data?.intro) site.intro = data.intro
+    if (data?.mission) about.mission.text = data.mission
+    if (data?.teamIntro) about.team.intro = data.teamIntro
+    if (data?.contact?.email) site.contact.email = data.contact.email
+    if (data?.contact?.address) {
+      site.address = data.contact.address
+      about.place.value = data.contact.address
+    }
+  } catch (requestError) {
+    if (requestError.name !== 'AbortError') error.value = requestError.message || '关于页面加载失败'
+  } finally {
+    loading.value = false
+  }
+})
+
+onBeforeUnmount(() => controller.abort())
 
 /* 价值观轮播 */
 const slide = ref(0)
@@ -42,6 +66,13 @@ function toggle(index) {
 
 <template>
   <div class="doc-page">
+    <div class="container api-state-wrap">
+      <p v-if="loading" class="api-state" role="status">正在加载组织信息…</p>
+      <div v-else-if="error" class="api-state api-state--error" role="alert">
+        {{ error }}，当前展示本地兜底内容。
+      </div>
+    </div>
+
     <!-- 我们的使命 -->
     <section class="doc-section doc-section--first">
       <div class="container">

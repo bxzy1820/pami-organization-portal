@@ -1,3 +1,6 @@
+import { reactive, ref } from 'vue'
+import { portalApi } from '@/api/client'
+
 /**
  * 站点内容配置
  * ---------------------------------------------------------------------------
@@ -10,7 +13,7 @@
  * ---------------------------------------------------------------------------
  */
 
-export const site = {
+export const site = reactive({
   /* 注册全称仅用于页脚权属信息与合规展示 */
   name: "AnySome组织门户",
   shortName: "葩米科技",
@@ -175,7 +178,7 @@ export const site = {
       points: ["专业咨询", "联合项目共建", "成果落地支持"],
     },
   ],
-};
+})
 
 /* 顶部导航 */
 export const navigation = [
@@ -183,16 +186,66 @@ export const navigation = [
   { label: "关于我们", to: "/about" },
   { label: "研究方向", to: "/business" },
   { label: "项目成果", to: "/projects" },
+  { label: "动态", to: "/news" },
+  { label: "加入我们", to: "/recruitment" },
 ];
 
 /* 外部链接 */
-export const externalLinks = [
+export const externalLinks = reactive([
   {
     label: "河北省保定市",
     desc: "河北大学AnySome",
     url: "https://www.baoding.gov.cn/",
   },
-];
+])
+
+export const siteLoading = ref(false)
+export const siteError = ref('')
+
+let siteRequest
+
+export function loadSite() {
+  if (siteRequest) return siteRequest
+
+  siteLoading.value = true
+  siteError.value = ''
+  siteRequest = portalApi.getSite()
+    .then((data) => {
+      if (!data) throw new Error('站点信息为空')
+
+      site.name = data.orgName || site.name
+      site.shortName = data.orgShortName || site.shortName
+      site.intro = data.intro || site.intro
+      site.contact.email = data.contact?.email || ''
+      site.address = data.contact?.address || site.address
+
+      if (data.mission) site.about.mission.text = data.mission
+      if (data.teamIntro) site.about.team.intro = data.teamIntro
+      if (data.contact?.address) site.about.place.value = data.contact.address
+
+      externalLinks.splice(
+        0,
+        externalLinks.length,
+        ...(data.externalLinks || []).map((link) => ({
+          label: link.name,
+          url: link.url,
+          desc: ''
+        }))
+      )
+
+      return data
+    })
+    .catch((error) => {
+      siteError.value = error.message || '站点信息加载失败'
+      siteRequest = null
+      throw error
+    })
+    .finally(() => {
+      siteLoading.value = false
+    })
+
+  return siteRequest
+}
 
 /* 预留栏目说明：第一期仅展示栏目状态，后续填充内容即可 */
 export const sections = {

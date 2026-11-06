@@ -1,6 +1,37 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { site } from '@/data/site'
+import { portalApi } from '@/api/client'
+
+const loading = ref(true)
+const error = ref('')
+const apiItems = ref(null)
+const controller = new AbortController()
+
+const businessItems = computed(() => {
+  if (apiItems.value) {
+    return apiItems.value.map((item, index) => ({
+      id: `business-${index}`,
+      title: item.title,
+      summary: item.desc,
+      points: []
+    }))
+  }
+  return error.value ? site.business : []
+})
+
+onMounted(async () => {
+  try {
+    const data = await portalApi.getBusiness({ signal: controller.signal })
+    apiItems.value = Array.isArray(data?.list) ? data.list : []
+  } catch (requestError) {
+    if (requestError.name !== 'AbortError') error.value = requestError.message || '研究方向加载失败'
+  } finally {
+    loading.value = false
+  }
+})
+
+onBeforeUnmount(() => controller.abort())
 
 const cooperation = [
   { title: '议题沟通', text: '了解问题背景、目标与约束，一起明确研究边界和判断标准。' },
@@ -36,9 +67,13 @@ function toggle(index) {
 
     <section class="doc-section">
       <div class="container">
-        <div class="biz-list">
+        <p v-if="loading" class="api-state" role="status">正在加载研究方向…</p>
+        <div v-else-if="error" class="api-state api-state--error" role="alert">
+          {{ error }}，当前展示本地兜底内容。
+        </div>
+        <div v-if="!loading && businessItems.length" class="biz-list">
           <article
-            v-for="(item, index) in site.business"
+            v-for="(item, index) in businessItems"
             :key="item.id"
             class="biz-item"
             v-reveal="index * 80"
@@ -47,12 +82,13 @@ function toggle(index) {
             <div>
               <h2 class="biz-item__title">{{ item.title }}</h2>
               <p class="biz-item__text">{{ item.summary }}</p>
-              <ul class="biz-item__tags">
+              <ul v-if="item.points?.length" class="biz-item__tags">
                 <li v-for="point in item.points" :key="point">{{ point }}</li>
               </ul>
             </div>
           </article>
         </div>
+        <p v-else-if="!loading && !error" class="api-state api-state--empty">暂无研究方向数据。</p>
       </div>
     </section>
 

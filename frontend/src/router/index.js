@@ -26,10 +26,21 @@ const routes = [
     component: () => import('@/views/ProjectsView.vue'),
     meta: { title: '项目成果', description: '项目案例、技术成果与伙伴合作实践。' }
   },
+  {
+    path: '/news',
+    name: 'news',
+    component: () => import('@/views/NewsView.vue'),
+    meta: { title: '动态', description: '了解组织近期公告、活动与阶段性进展。' }
+  },
+  {
+    path: '/recruitment',
+    name: 'recruitment',
+    component: () => import('@/views/RecruitmentView.vue'),
+    meta: { title: '加入我们', description: '查看当前开放的合作与招募信息。' }
+  },
   // 已下线栏目的旧地址，统一回到首页
   { path: '/team', redirect: '/' },
-  { path: '/news', redirect: '/' },
-  { path: '/join', redirect: '/' },
+  { path: '/join', redirect: '/recruitment' },
   { path: '/contact', redirect: '/' },
   {
     // 兼容直接访问 /index.html（例如预览工具、静态服务器默认入口）
