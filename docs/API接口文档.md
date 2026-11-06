@@ -116,12 +116,6 @@ X-Site-Token: <站点令牌>   // 仅写接口需要
     ],
     "externalLinks": [
       {
-        "label": "Skill 平台",
-        "desc": "组织的技能与能力平台",
-        "url": "http://124.223.224.129:8080/",
-        "primary": true
-      },
-      {
         "label": "雄安新区官网",
         "desc": "雄安新区官方信息发布平台",
         "url": "https://www.xiongan.gov.cn/"

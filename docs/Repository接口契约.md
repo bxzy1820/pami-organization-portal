@@ -80,9 +80,7 @@ const MOCK_SITE = {
     email: 'contact@pami.com',
     address: '河北省保定市×××',
   },
-  externalLinks: [
-    { name: 'Skill Hub', url: 'http://124.223.224.129:8080/' },
-  ],
+  externalLinks: [],
 };
 
 const MOCK_HOME = {

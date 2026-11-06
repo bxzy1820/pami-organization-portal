@@ -11,7 +11,7 @@ const scrolled = ref(false)
 // 只有首页是全屏深色 Hero，页头透明；其余页面页头直接为白底
 const solid = computed(() => route.name !== 'home' || scrolled.value)
 
-const skillLink = externalLinks.find((link) => link.primary)
+const primaryLink = externalLinks.find((link) => link.primary)
 
 function updateSolid() {
   scrolled.value = window.scrollY > 24
@@ -67,13 +67,13 @@ onBeforeUnmount(() => {
 
       <div class="header__actions">
         <a
-          v-if="skillLink"
+          v-if="primaryLink"
           class="header__link"
-          :href="skillLink.url"
+          :href="primaryLink.url"
           target="_blank"
           rel="noopener noreferrer"
         >
-          {{ skillLink.label }}
+          {{ primaryLink.label }}
         </a>
       </div>
 

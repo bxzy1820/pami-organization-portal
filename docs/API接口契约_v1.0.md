@@ -147,11 +147,7 @@
 
 &#x20;   },
 
-&#x20;   "externalLinks": \[
-
-&#x20;     { "name": "Skill Hub", "url": "http://124.223.224.129:8080/" }
-
-&#x20;   ]
+&#x20;   "externalLinks": \[]
 
 &#x20; }
 

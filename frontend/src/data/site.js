@@ -185,14 +185,8 @@ export const navigation = [
   { label: "项目成果", to: "/projects" },
 ];
 
-/* 外部链接：门户与 Skill 平台相互独立建设，通过导航链接互相访问 */
+/* 外部链接 */
 export const externalLinks = [
-  {
-    label: "内部协作平台",
-    desc: "组织的技能与能力平台",
-    url: "http://124.223.224.129:8080/",
-    primary: true,
-  },
   {
     label: "河北省保定市",
     desc: "河北大学AnySome",

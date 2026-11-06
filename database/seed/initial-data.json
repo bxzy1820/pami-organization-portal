@@ -21,8 +21,6 @@
     { "code": "data", "title": "信息与知识管理", "summary": "协助组织梳理核心资源、建立信息规范，让沉淀的知识真正支撑管理与决策。", "sortOrder": 3 },
     { "code": "cocreation", "title": "外部合作与联合共创", "summary": "与各类伙伴共建课题与创新项目，推动合作在实际场景中验证与转化。", "sortOrder": 4 }
   ],
-  "externalLinks": [
-    { "name": "内部协作平台", "url": "http://124.223.224.129:8080/", "desc": "组织的技能与能力平台", "primary": true, "sortOrder": 1 }
-  ],
+  "externalLinks": [],
   "posts": []
 }

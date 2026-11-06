@@ -22,7 +22,6 @@
     { "code": "cocreation", "title": "外部合作与联合共创", "summary": "与各类伙伴共建课题与创新项目。", "sortOrder": 4 }
   ],
   "externalLinks": [
-    { "name": "内部协作平台", "url": "http://124.223.224.129:8080/", "desc": "组织的技能与能力平台", "primary": true, "sortOrder": 1 },
     { "name": "河北省保定市", "url": "https://www.baoding.gov.cn/", "desc": "河北大学 AnySome", "sortOrder": 2 }
   ],
   "posts": [

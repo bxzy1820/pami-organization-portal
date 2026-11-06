@@ -31,7 +31,7 @@ export const swaggerSpec = {
                     mission: '使命与定位',
                     teamIntro: '团队整体介绍',
                     contact: { email: 'contact@pami.com', address: '河北省保定市×××' },
-                    externalLinks: [{ name: 'Skill Hub', url: 'http://124.223.224.129:8080/' }],
+                    externalLinks: [],
                   },
                 },
               },
