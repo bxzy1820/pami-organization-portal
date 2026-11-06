@@ -1,0 +1,71 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: pami-portal-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-pami_portal}
+      MYSQL_USER: ${MYSQL_USER:-portal_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - pami_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    networks:
+      - pami_internal
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: pami-portal-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_PREFIX: /api/v1
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      DATABASE_URL: mysql://${MYSQL_USER:-portal_user}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE:-pami_portal}
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api-docs/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - pami_internal
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: pami-portal-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${PUBLIC_PORT:-8081}:80"
+    networks:
+      - pami_internal
+
+volumes:
+  pami_mysql_data:
+    name: pami-portal-mysql-data
+
+networks:
+  pami_internal:
+    name: pami-portal-network
+
