@@ -11,7 +11,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { PrismaClient } from '@prisma/client'
+import { getPrisma } from '../../backend/src/prisma/client.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -83,7 +83,7 @@ async function main() {
   const reset = !!args.reset
 
   const data = loadSeed(setName)
-  const prisma = new PrismaClient()
+  const prisma = getPrisma()
 
   try {
     if (reset) {
