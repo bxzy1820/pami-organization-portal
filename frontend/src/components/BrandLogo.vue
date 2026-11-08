@@ -18,12 +18,13 @@ defineProps({
       role="img"
       aria-label="组织标识"
     >
-      <g fill="currentColor">
+      <g class="brand__petals" fill="currentColor">
         <ellipse cx="20" cy="20" rx="3.7" ry="7.9" />
         <ellipse cx="20" cy="20" rx="3.7" ry="7.9" transform="rotate(45 20 20)" />
         <ellipse cx="20" cy="20" rx="3.7" ry="7.9" transform="rotate(90 20 20)" />
         <ellipse cx="20" cy="20" rx="3.7" ry="7.9" transform="rotate(135 20 20)" />
       </g>
+      <circle class="brand__core" cx="20" cy="20" r="3.2" />
     </svg>
     <span v-if="showText" class="brand__text">
       <span class="brand__name">{{ site.shortName }}</span>
@@ -44,6 +45,10 @@ defineProps({
   color: var(--brand);
 }
 
+.brand__core {
+  fill: var(--accent);
+}
+
 .brand__text {
   display: flex;
   flex-direction: column;
@@ -53,7 +58,8 @@ defineProps({
 .brand__name {
   font-size: 17px;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
   color: var(--ink);
 }
 
@@ -67,6 +73,10 @@ defineProps({
 
 .brand--light .brand__mark {
   color: #fff;
+}
+
+.brand--light .brand__core {
+  fill: #df6a70;
 }
 
 .brand--light .brand__name {
